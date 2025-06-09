@@ -24,7 +24,7 @@ interface CountdownRendererProps {
   completed: boolean;
 }
 
-// Componente para mostrar los dígitos sin fondo
+// Componente para mostrar los dígitos sin fondo 
 const CountdownDigit = ({ value, label }: { value: number, label: string }) => (
   <div className="flex flex-col items-center">
     <span className="text-5xl md:text-6xl lg:text-7xl font-mono-custom font-bold text-white px-4 py-2 transition-all duration-300 hover:scale-105">
