@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Countdown from 'react-countdown';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
@@ -71,7 +71,7 @@ export default function CountdownTimer({ onComplete }: CountdownTimerProps) {
   }, []);
 
   // Función para manejar los cambios de fecha y modo
-  const handleDateChange = (mode: 'waiting' | 'to_bogota' | 'in_bogota' | 'arrived') => {
+  const handleDateChange = useCallback((mode: 'waiting' | 'to_bogota' | 'in_bogota' | 'arrived') => {
     setDisplayMode(mode);
     
     switch(mode) {
@@ -99,13 +99,13 @@ export default function CountdownTimer({ onComplete }: CountdownTimerProps) {
 
     // Forzamos la actualización del componente Countdown
     setKey(prevKey => prevKey + 1);
-  };
+  }, [onComplete]);
 
   // Inicializamos en modo "esperando" al cargar
   useEffect(() => {
     // Establecemos explícitamente el modo "waiting" al iniciar
     handleDateChange('waiting');
-  }, []); // Solo se ejecuta una vez al cargar
+  }, [handleDateChange]); // Solo se ejecuta una vez al cargar
 
   // Renderizador de la cuenta regresiva
   const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRendererProps) => {

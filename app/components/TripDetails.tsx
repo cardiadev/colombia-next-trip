@@ -1,28 +1,9 @@
 import React from 'react';
-import { 
-  DEPARTURE_GDL_DATE, 
-  ARRIVAL_BOG_DATE, 
-  DEPARTURE_BOG_DATE, 
-  ARRIVAL_BGA_DATE 
-} from './CountdownTimer';
-import { Calendar, Plane, MapPin, Clock } from 'lucide-react';
 
 export default function TripDetails() {
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent('Ya mero te veo amor... muero por verte');
     window.open(`https://wa.me/?text=${message}`, '_blank');
-  };
-
-  // Función para formatear fecha a formato legible
-  const formatDate = (date: Date) => {
-    return date.toLocaleString('es-ES', {
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
   };
 
   return (
