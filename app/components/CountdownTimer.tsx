@@ -49,6 +49,27 @@ export default function CountdownTimer({ onComplete }: CountdownTimerProps) {
   // Este estado fuerza la actualización del contador cuando cambia
   const [key, setKey] = useState(0);
 
+  // Estado para verificar si está activado el modo debug
+  const [debugMode, setDebugMode] = useState(false);
+
+  // Verificar localStorage para el modo debug
+  useEffect(() => {
+    const checkDebugMode = () => {
+      const debugEnabled = localStorage.getItem('tripDebugMode') === 'true';
+      setDebugMode(debugEnabled);
+    };
+
+    // Verificar al cargar
+    checkDebugMode();
+
+    // Escuchar cambios en localStorage
+    window.addEventListener('storage', checkDebugMode);
+
+    return () => {
+      window.removeEventListener('storage', checkDebugMode);
+    };
+  }, []);
+
   // Función para manejar los cambios de fecha y modo
   const handleDateChange = (mode: 'waiting' | 'to_bogota' | 'in_bogota' | 'arrived') => {
     setDisplayMode(mode);
@@ -173,33 +194,35 @@ export default function CountdownTimer({ onComplete }: CountdownTimerProps) {
         )}
       </div>
       
-      {/* Botones flotantes para pruebas */}
-      <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
-        <button 
-          onClick={() => handleDateChange('waiting')}
-          className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'waiting' ? 'bg-indigo-500 text-white' : 'bg-white/80 text-black'}`}
-        >
-          Esperando
-        </button>
-        <button 
-          onClick={() => handleDateChange('to_bogota')}
-          className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'to_bogota' ? 'bg-blue-500 text-white' : 'bg-white/80 text-black'}`}
-        >
-          Vuelo a Bogotá
-        </button>
-        <button 
-          onClick={() => handleDateChange('in_bogota')}
-          className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'in_bogota' ? 'bg-teal-500 text-white' : 'bg-white/80 text-black'}`}
-        >
-          En Bogotá
-        </button>
-        <button 
-          onClick={() => handleDateChange('arrived')}
-          className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'arrived' ? 'bg-pink-500 text-white' : 'bg-white/80 text-black'}`}
-        >
-          Llegada
-        </button>
-      </div>
+      {/* Botones flotantes para pruebas - solo se muestran si debugMode está activado */}
+      {debugMode && (
+        <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+          <button 
+            onClick={() => handleDateChange('waiting')}
+            className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'waiting' ? 'bg-indigo-500 text-white' : 'bg-white/80 text-black'}`}
+          >
+            Esperando
+          </button>
+          <button 
+            onClick={() => handleDateChange('to_bogota')}
+            className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'to_bogota' ? 'bg-blue-500 text-white' : 'bg-white/80 text-black'}`}
+          >
+            Vuelo a Bogotá
+          </button>
+          <button 
+            onClick={() => handleDateChange('in_bogota')}
+            className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'in_bogota' ? 'bg-teal-500 text-white' : 'bg-white/80 text-black'}`}
+          >
+            En Bogotá
+          </button>
+          <button 
+            onClick={() => handleDateChange('arrived')}
+            className={`px-4 py-2 rounded-lg font-medium shadow-lg ${displayMode === 'arrived' ? 'bg-pink-500 text-white' : 'bg-white/80 text-black'}`}
+          >
+            Llegada
+          </button>
+        </div>
+      )}
     </>
   );
 } 
